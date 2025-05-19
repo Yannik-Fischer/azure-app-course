@@ -1,7 +1,12 @@
 using Azure.Identity;
+using azure_app_course.Data;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var azureSqlConnection = builder.Configuration.GetConnectionString("AzureSqlDatabase");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(azureSqlConnection));
+
 builder.Services.AddRazorPages();
 builder.Services.AddApplicationInsightsTelemetry(new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions
 {
