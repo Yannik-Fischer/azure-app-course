@@ -5,6 +5,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>azure_app_course</RootNamespace>
+    <ApplicationInsightsResourceId>/subscriptions/af6e1b54-868f-4840-a0b4-0f857321a3ff/resourceGroups/az-group-rg/providers/microsoft.insights/components/az-course-webapp-vs</ApplicationInsightsResourceId>
+    <UserSecretsId>115e0eba-6c3d-4652-a000-80057e33720d</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.13.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.23.0" />
+  </ItemGroup>
 
 </Project>
