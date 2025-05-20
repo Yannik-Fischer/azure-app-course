@@ -1,0 +1,50 @@
+﻿@page "/upsert"
+@page "/upsert/{id}"
+@rendermode InteractiveServer
+@inject IEngineerService engineerService;
+@inject NavigationManager navigationManager;
+
+<h3>Upsert Engineer</h3>
+<EditForm FormName="upsert-engineer-form" OnSubmit="SaveEngineer" Model="engineer">
+    <div class="form-group row p-2">
+        <input type="hidden" @bind-value="engineer.id" />
+        <div class="col-md-6">
+            <InputText @bind-value="engineer.name" class="form-control" placeholder="Name" id="name" />
+        </div>
+
+        <div class="col-md-6">
+            <InputText @bind-value="engineer.country" class="form-control" placeholder="Country" id="country" />
+        </div>
+    </div>
+    <div class="form-group row p-2">
+        <div class="col-md-6">
+            <InputText @bind-value="engineer.specialty" class="form-control" placeholder="Specialty" id="specialty" />
+        </div>
+    </div>
+    <div class="form-group row p-2">
+        <div class="text-center">
+            <input class="btn btn-primary" type="submit" value="Save"/>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    Engineer engineer = new();
+
+    [Parameter]
+    public string? id { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(id))
+        {
+            engineer = await engineerService.GetEngineerDetailsById(id);
+        }
+    }
+
+    private async Task SaveEngineer()
+    {
+        await engineerService.UpsertEngineer(engineer);
+        navigationManager.NavigateTo("/");
+    }
+}

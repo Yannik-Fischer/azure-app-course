@@ -1,5 +1,0 @@
-{
-    "appService.preDeployTask": "publish-release",
-    "appService.deploySubpath": "bin\\Release\\net9.0\\publish",
-    "appService.defaultWebAppToDeploy": "undefined/subscriptions/af6e1b54-868f-4840-a0b4-0f857321a3ff/resourceGroups/az-group-rg/providers/Microsoft.Web/sites/az-course-webapp-yfi-vscode"
-}
