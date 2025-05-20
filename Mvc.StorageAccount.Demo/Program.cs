@@ -1,7 +1,10 @@
+using Mvc.StorageAccount.Demo.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<ITableStorageService, TableStorageService>();
 
 var app = builder.Build();
 

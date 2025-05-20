@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("795118c1-e675-4211-969c-7c47455f39b1")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Mvc.StorageAccount.Demo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5927b2afd5b7e7fa63fb512131ed7b9bf914aaa0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+162d8b3838863d66d68350ab32d8ccd747c4d706")]
 [assembly: System.Reflection.AssemblyProductAttribute("Mvc.StorageAccount.Demo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Mvc.StorageAccount.Demo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

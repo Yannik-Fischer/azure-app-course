@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Mvc.StorageAccount.Demo.Data.AttendeeEntity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmailAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Industry)
+            </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.PartitionKey)
+            </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.RowKey)
+            </th>
+            <th hidden>
+                @Html.DisplayNameFor(model => model.Timestamp)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EmailAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Industry)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.PartitionKey)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.RowKey)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.Timestamp)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { industry = item.Industry, id = item.RowKey }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Details", "Details", new { industry = item.Industry, id = item.RowKey }, new { @class = "btn btn-primary" })
+                    <form asp-action="Delete" style="display: inline-block">
+                        <input type="hidden" value="@item.RowKey" name="id" />
+                        <input type="hidden" value="@item.Industry" name="industry" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                    </form>
+                    @* @Html.ActionLink("Delete", "Delete", new { industry = item.Industry, id = item.RowKey }) *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
