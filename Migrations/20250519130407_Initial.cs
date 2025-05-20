@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace azure_app_course.Migrations
+namespace RazorPagesWeb.NetCore.EF.Demo.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration

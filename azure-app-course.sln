@@ -2,7 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-app-course", "azure-app-course.csproj", "{D28EFDCB-B470-0928-5FDF-4143B8FE511A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorPagesWeb.NetCore.EF.Demo", "RazorPagesWeb.NetCore.EF.Demo.csproj", "{D28EFDCB-B470-0928-5FDF-4143B8FE511A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.AzureCosmosDb.Demo", "..\Blazor.AzureCosmosDb.Demo\Blazor.AzureCosmosDb.Demo.csproj", "{E384C0DF-AD0E-4084-BE24-00E6B27BDEFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,6 +16,10 @@ Global
 		{D28EFDCB-B470-0928-5FDF-4143B8FE511A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D28EFDCB-B470-0928-5FDF-4143B8FE511A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D28EFDCB-B470-0928-5FDF-4143B8FE511A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E384C0DF-AD0E-4084-BE24-00E6B27BDEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E384C0DF-AD0E-4084-BE24-00E6B27BDEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E384C0DF-AD0E-4084-BE24-00E6B27BDEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E384C0DF-AD0E-4084-BE24-00E6B27BDEFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

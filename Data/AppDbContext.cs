@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace azure_app_course.Data
+namespace RazorPagesWeb.NetCore.EF.Demo.Data
 {
     public class AppDbContext : DbContext
     {

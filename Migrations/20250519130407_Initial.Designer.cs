@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using azure_app_course.Data;
+using RazorPagesWeb.NetCore.EF.Demo.Data;
 
 #nullable disable
 
-namespace azure_app_course.Migrations
+namespace RazorPagesWeb.NetCore.EF.Demo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250519130407_Initial")]
@@ -25,7 +25,7 @@ namespace azure_app_course.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("azure_app_course.Data.Person", b =>
+            modelBuilder.Entity("RazorPagesWeb.NetCore.EF.Demo.Data.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

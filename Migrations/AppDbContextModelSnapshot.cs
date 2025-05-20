@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using azure_app_course.Data;
+using RazorPagesWeb.NetCore.EF.Demo.Data;
 
 #nullable disable
 
-namespace azure_app_course.Migrations
+namespace RazorPagesWeb.NetCore.EF.Demo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace azure_app_course.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("azure_app_course.Data.Person", b =>
+            modelBuilder.Entity("RazorPagesWeb.NetCore.EF.Demo.Data.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

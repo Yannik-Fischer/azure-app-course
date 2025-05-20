@@ -1,5 +1,5 @@
 using Azure.Identity;
-using azure_app_course.Data;
+using RazorPagesWeb.NetCore.EF.Demo.Data;
 using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
