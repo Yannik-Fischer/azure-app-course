@@ -6,18 +6,19 @@ namespace Mvc.StorageAccount.Demo.Services
 {
     public class BlobStorageService : IBlobStorageService
     {
-        private const string containerName = "attendeeimages";
         private readonly IConfiguration _configuration;
+        private readonly BlobContainerClient _blobContainerClient;
 
-        public BlobStorageService(IConfiguration configuration)
+        public BlobStorageService(IConfiguration configuration, BlobContainerClient blobContainerClient)
         {
             _configuration = configuration;
+            _blobContainerClient = blobContainerClient;
+            _blobContainerClient.CreateIfNotExists();
         }
 
         public async Task<string> UploadBlob(IFormFile formFile, string imageName, string? originalBlobName = null)
         {
             var blobname = $"{imageName}{Path.GetExtension(formFile.FileName)}";
-            var blobClient = await GetBlobContainerClient();
 
             if (!string.IsNullOrEmpty(originalBlobName))
             {
@@ -29,8 +30,8 @@ namespace Mvc.StorageAccount.Demo.Services
                 formFile.CopyTo(memoryStream);
                 memoryStream.Position = 0;
 
-                var blob = blobClient.GetBlobClient(blobname);
-                await blob.UploadAsync(content: memoryStream, overwrite: true);
+                var blobClient = _blobContainerClient.GetBlobClient(blobname);
+                await blobClient.UploadAsync(content: memoryStream, overwrite: true);
             }
 
             return blobname;
@@ -38,33 +39,32 @@ namespace Mvc.StorageAccount.Demo.Services
 
         public async Task<string> GetBlobUrl(string imageName)
         {
-            var blobClient = await GetBlobContainerClient();
-            var blob = blobClient.GetBlobClient(imageName);
+            var blobClient = _blobContainerClient.GetBlobClient(imageName);
 
             var blobSasBuilder = new BlobSasBuilder
             {
-                BlobContainerName = blob.BlobContainerName,
-                BlobName = blob.Name,
+                BlobContainerName = blobClient.BlobContainerName,
+                BlobName = blobClient.Name,
                 ExpiresOn = DateTime.UtcNow.AddMinutes(2),
                 Protocol = SasProtocol.Https,
                 Resource = "b"
             };
             blobSasBuilder.SetPermissions(BlobAccountSasPermissions.Read);
 
-            return blob.GenerateSasUri(blobSasBuilder).ToString();
+            return blobClient.GenerateSasUri(blobSasBuilder).ToString();
         }
 
         public async Task DeleteBlob(string imageName)
         {
-            var blobClient = await GetBlobContainerClient();
-            var blob = blobClient.GetBlobClient(imageName);
+            var blobClient = _blobContainerClient.GetBlobClient(imageName);
 
-            await blob.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
+            await blobClient.DeleteIfExistsAsync(DeleteSnapshotsOption.IncludeSnapshots);
         }
 
+        [Obsolete]
         private async Task<BlobContainerClient> GetBlobContainerClient()
         {
-            var container = new BlobContainerClient(_configuration["StorageConnectionString"], containerName);
+            var container = new BlobContainerClient(_configuration["AzureStorage:ConnectionString"], _configuration["AzureStorage:BlobContainerName"]);
 
             await container.CreateIfNotExistsAsync();
 

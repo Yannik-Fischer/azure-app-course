@@ -6,23 +6,25 @@ namespace Mvc.StorageAccount.Demo.Services
 {
     public class QueueService : IQueueService
     {
-        private const string queueName = "attendee-emails";
         private readonly IConfiguration _configuration;
+        private readonly QueueClient _queueClient;
 
-        public QueueService(IConfiguration configuration)
+        public QueueService(IConfiguration configuration, QueueClient queueClient)
         {
             _configuration = configuration;
+            _queueClient = queueClient;
+            _queueClient.CreateIfNotExists();
         }
 
         public async Task SendMessage(EmailMessage emailMessage)
         {
-            var queueClient = await GetQueueClient();
-            await queueClient.SendMessageAsync(JsonConvert.SerializeObject(emailMessage));
+            await _queueClient.SendMessageAsync(JsonConvert.SerializeObject(emailMessage));
         }
 
+        [Obsolete]
         private async Task<QueueClient> GetQueueClient()
         {
-            var queueClient = new QueueClient(_configuration["StorageConnectionString"], queueName, new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });
+            var queueClient = new QueueClient(_configuration["AzureStorage:ConnectionString"], _configuration["AzureStorage:QueueName"], new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });
 
             await queueClient.CreateIfNotExistsAsync();
 
