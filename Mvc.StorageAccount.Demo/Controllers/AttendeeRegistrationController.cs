@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Mvc.StorageAccount.Demo.Data;
 using Mvc.StorageAccount.Demo.Services;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Mvc.StorageAccount.Demo.Controllers
 {
@@ -10,11 +11,13 @@ namespace Mvc.StorageAccount.Demo.Controllers
     {
         private readonly ITableStorageService _tableStorageService;
         private readonly IBlobStorageService _blobStorageService;
+        private readonly IQueueService _queueService;
 
-        public AttendeeRegistrationController(ITableStorageService tableStorageService, IBlobStorageService blobStorageService)
+        public AttendeeRegistrationController(ITableStorageService tableStorageService, IBlobStorageService blobStorageService, IQueueService queueService)
         {
             _tableStorageService = tableStorageService;
             _blobStorageService = blobStorageService;
+            _queueService = queueService;
         }
 
         // GET: AttendeeRegistrationController
@@ -68,6 +71,15 @@ namespace Mvc.StorageAccount.Demo.Controllers
 
                 await _tableStorageService.UpsertAttendee(attendeeEntity);
 
+                var emailMessage = new EmailMessage
+                {
+                    EmailAddress = attendeeEntity.EmailAddress,
+                    TimeStamp = DateTime.Now,
+                    Message = $"Hello {attendeeEntity.FirstName} {attendeeEntity.LastName},\n\r Thank you for registering for this event.\n\r Your record has been saved for future reference."
+                };
+
+                await _queueService.SendMessage(emailMessage);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -99,6 +111,15 @@ namespace Mvc.StorageAccount.Demo.Controllers
 
                 await _tableStorageService.UpsertAttendee(attendeeEntity);
 
+                var email = new EmailMessage
+                {
+                    EmailAddress = attendeeEntity.EmailAddress,
+                    TimeStamp = DateTime.UtcNow,
+                    Message = $"Hello {attendeeEntity.FirstName} {attendeeEntity.LastName},\n\r Your record was modified successfully"
+                };
+
+                await _queueService.SendMessage(email);
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -118,6 +139,15 @@ namespace Mvc.StorageAccount.Demo.Controllers
 
                 await _tableStorageService.DeleteAttendee(industry, id);
                 await _blobStorageService.DeleteBlob(attendee.ImageName);
+
+                var email = new EmailMessage
+                {
+                    EmailAddress = attendee.EmailAddress,
+                    TimeStamp = DateTime.UtcNow,
+                    Message = $"Hello {attendee.FirstName} {attendee.LastName},\n\r Your record was removed successfully"
+                };
+
+                await _queueService.SendMessage(email);
 
                 return RedirectToAction(nameof(Index));
             }
