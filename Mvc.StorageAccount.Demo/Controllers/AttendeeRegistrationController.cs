@@ -9,16 +9,24 @@ namespace Mvc.StorageAccount.Demo.Controllers
     public class AttendeeRegistrationController : Controller
     {
         private readonly ITableStorageService _tableStorageService;
+        private readonly IBlobStorageService _blobStorageService;
 
-        public AttendeeRegistrationController(ITableStorageService tableStorageService)
+        public AttendeeRegistrationController(ITableStorageService tableStorageService, IBlobStorageService blobStorageService)
         {
             _tableStorageService = tableStorageService;
+            _blobStorageService = blobStorageService;
         }
 
         // GET: AttendeeRegistrationController
         public async Task<ActionResult> Index()
         {
             var attendees = await _tableStorageService.GetAllAttendees();
+
+            foreach (var attendee in attendees)
+            {
+                attendee.ImageName = await _blobStorageService.GetBlobUrl(attendee.ImageName);
+            }
+
             return View(attendees);
         }
 
@@ -26,6 +34,8 @@ namespace Mvc.StorageAccount.Demo.Controllers
         public async Task<ActionResult> Details(string industry, string id)
         {
             var attendee = await _tableStorageService.GetAttendee(industry, id);
+            attendee.ImageName = await _blobStorageService.GetBlobUrl(attendee.ImageName);
+
             return View(attendee);
         }
 
@@ -38,12 +48,23 @@ namespace Mvc.StorageAccount.Demo.Controllers
         // POST: AttendeeRegistrationController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(AttendeeEntity attendeeEntity)
+        public async Task<ActionResult> Create(AttendeeEntity attendeeEntity, IFormFile formFile)
         {
             try
             {
+                var id = Guid.NewGuid().ToString();
+
                 attendeeEntity.PartitionKey = attendeeEntity.Industry;
-                attendeeEntity.RowKey = Guid.NewGuid().ToString();
+                attendeeEntity.RowKey = id;
+
+                if (formFile.Length > 0)
+                {
+                    attendeeEntity.ImageName = await _blobStorageService.UploadBlob(formFile, id);
+                }
+                else
+                {
+                    attendeeEntity.ImageName = "default.jpg";
+                }
 
                 await _tableStorageService.UpsertAttendee(attendeeEntity);
 
@@ -65,10 +86,15 @@ namespace Mvc.StorageAccount.Demo.Controllers
         // POST: AttendeeRegistrationController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(AttendeeEntity attendeeEntity)
+        public async Task<ActionResult> Edit(AttendeeEntity attendeeEntity, IFormFile formFile)
         {
             try
             {
+                if (formFile?.Length > 0)
+                {
+                    attendeeEntity.ImageName = await _blobStorageService.UploadBlob(formFile, attendeeEntity.RowKey, attendeeEntity.ImageName);
+                }
+
                 attendeeEntity.PartitionKey = attendeeEntity.Industry;
 
                 await _tableStorageService.UpsertAttendee(attendeeEntity);
@@ -88,7 +114,10 @@ namespace Mvc.StorageAccount.Demo.Controllers
         {
             try
             {
+                var attendee = await _tableStorageService.GetAttendee(industry, id);
+
                 await _tableStorageService.DeleteAttendee(industry, id);
+                await _blobStorageService.DeleteBlob(attendee.ImageName);
 
                 return RedirectToAction(nameof(Index));
             }
